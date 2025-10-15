@@ -1,0 +1,171 @@
+.view-complaints-page {
+  padding: var(--spacing-xl);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.view-complaints-page h1 {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.view-complaints-page p {
+  color: var(--text-secondary);
+  font-size: var(--font-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.map-wrapper {
+  width: 100%;
+  height: 600px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Fix for React Strict Mode double initialization */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper {
+  background-color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  min-width: 280px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-popup-tip {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  font-family: inherit;
+  color: #000000;
+}
+
+.complaint-popup,
+.area-popup {
+  padding: var(--spacing-md);
+  background-color: #ffffff;
+}
+
+.complaint-popup strong,
+.area-popup strong {
+  color: #000000;
+  font-size: var(--font-lg);
+  display: block;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--accent-green);
+}
+
+.area-popup strong {
+  border-bottom-color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.popup-detail {
+  color: #333333;
+  font-size: var(--font-sm);
+  margin-top: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-xs);
+  line-height: 1.5;
+}
+
+.popup-detail .label {
+  font-weight: var(--font-semibold);
+  color: #000000;
+  min-width: 90px;
+}
+
+.popup-detail .status {
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.popup-detail .status.pending {
+  background-color: rgba(251, 191, 36, 0.3);
+  color: #f59e0b;
+  border: 1px solid rgba(251, 191, 36, 0.5);
+}
+
+.popup-detail .status.in-progress {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.popup-detail .status.active {
+  background-color: rgba(239, 68, 68, 0.3);
+  color: #ff6b6b;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+}
+
+.popup-detail .status.closed {
+  background-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.5);
+}
+
+/* Leaflet popup close button styling */
+.leaflet-popup-close-button {
+  color: #000000 !important;
+  font-size: 20px !important;
+  padding: 4px 8px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: var(--accent-green) !important;
+}
+
+/* Light theme status badge overrides */
+[data-theme="light"] .popup-detail .status.pending {
+  background-color: #eab308 !important;
+  color: #713f12;
+  border-color: #ca8a04;
+}
+
+[data-theme="light"] .popup-detail .status.in-progress {
+  background-color: #60a5fa;
+  color: #1e3a8a;
+  border-color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .view-complaints-page {
+    padding: var(--spacing-md);
+  }
+
+  .map-wrapper {
+    height: 400px;
+  }
+
+  .view-complaints-page h1 {
+    font-size: var(--font-2xl);
+  }
+}
