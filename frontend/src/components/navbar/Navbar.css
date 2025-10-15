@@ -1,0 +1,269 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  background: var(--secondary-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border-bottom: 1px solid var(--border-primary);
+  z-index: var(--z-navbar);
+  display: flex;
+  align-items: center;
+}
+
+.navbar-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 200px;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 28px;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  transition: color var(--transition-normal);
+}
+
+.mobile-menu-toggle:hover {
+  color: var(--accent-yellow);
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-text {
+  font-size: 28px;
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.logo-subtitle {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  font-weight: var(--font-normal);
+}
+
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 300px;
+  justify-content: flex-end;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-right: var(--spacing-md);
+}
+
+.navbar-icon-btn {
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-sm);
+}
+
+.navbar-icon-btn:hover {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+  transform: translateY(-2px);
+}
+
+.navbar-icon-btn.theme-toggle {
+  border-color: var(--border-secondary);
+}
+
+.navbar-icon-btn.theme-toggle:hover {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+/* Remove green color from Clerk UserButton */
+.navbar-right .cl-userButtonBox,
+.navbar-right .cl-userButtonBox.cl-open,
+.navbar-right [class*="cl-internal"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-right .cl-userButtonBox svg,
+.navbar-right .cl-userButtonBox path,
+.navbar-right .cl-userButtonTrigger svg,
+.navbar-right .cl-userButtonTrigger path {
+  color: var(--text-primary) !important;
+  fill: var(--text-primary) !important;
+  stroke: var(--text-primary) !important;
+}
+
+/* Remove green from popover action button icons */
+.cl-userButtonPopoverActionButtonIconBox,
+.cl-userButtonPopoverActionButtonIconBox__manageAccount,
+[class*="cl-userButtonPopoverActionButtonIconBox"] {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+.cl-userButtonPopoverActionButtonIconBox svg,
+.cl-userButtonPopoverActionButtonIconBox path,
+[class*="cl-userButtonPopoverActionButtonIconBox"] svg,
+[class*="cl-userButtonPopoverActionButtonIconBox"] path {
+  color: var(--text-primary) !important;
+  fill: var(--text-primary) !important;
+  stroke: var(--text-primary) !important;
+}
+
+/* Remove green border from avatar container */
+.cl-userPreviewAvatarContainer,
+.cl-userPreviewAvatarContainer__userButton,
+[class*="cl-userPreviewAvatarContainer"] {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove green border from avatar box */
+.cl-avatarBox,
+.cl-userPreviewAvatarBox,
+[class*="cl-avatarBox"] {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove green border from avatar image */
+.cl-avatarImage,
+.cl-userPreviewAvatarImage,
+[class*="cl-avatarImage"],
+[class*="cl-userPreviewAvatarImage"] {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove border from internal span */
+[class*="cl-internal-cieags"] {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.github-star {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color var(--transition-normal);
+  box-shadow: var(--shadow-glow);
+  border: 1px solid var(--border-primary);
+  padding: var(--spacing-sm);
+}
+
+.github-star:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.icon {
+  font-size: var(--spacing-md);
+}
+
+.nav-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 1024px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .navbar-left {
+    min-width: auto;
+  }
+
+  .navbar-right {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-content {
+    padding: 0 var(--spacing-md);
+  }
+
+  .logo-text {
+    font-size: var(--font-xl);
+  }
+
+  .github-star {
+    padding: var(--spacing-xs);
+    font-size: var(--font-xs);
+  }
+
+  .nav-text {
+    display: none;
+  }
+
+  .navbar-actions {
+    gap: 4px;
+    margin-right: var(--spacing-sm);
+  }
+
+  .navbar-icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-content {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .logo-text {
+    font-size: var(--font-lg);
+  }
+}
