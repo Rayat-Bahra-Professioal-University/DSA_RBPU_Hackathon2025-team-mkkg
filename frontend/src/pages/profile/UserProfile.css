@@ -1,0 +1,411 @@
+.profile-container {
+  padding: var(--spacing-xl);
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.profile-header {
+  margin-bottom: var(--spacing-2xl);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-header h1 {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.profile-header p {
+  color: var(--text-secondary);
+  font-size: var(--font-lg);
+}
+
+.clerk-profile-wrapper {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  min-height: 600px;
+  box-sizing: border-box;
+}
+
+.clerk-profile-wrapper > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* Force Clerk card to be full width */
+.clerk-profile-wrapper .cl-rootBox {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  background: #020202 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 2rem !important;
+  box-shadow: none !important;
+}
+
+/* Target the specific userProfile root class */
+.clerk-profile-wrapper .cl-rootBox.cl-userProfile-root,
+.clerk-profile-wrapper .cl-userProfile-root,
+.clerk-profile-wrapper .cl-internal-e94jq8 {
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  background: #020202 !important;
+  background-color: #020202 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.clerk-profile-wrapper .cl-userProfile-root {
+  background: #020202 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.clerk-profile-wrapper [data-clerk-component="UserProfile"] {
+  background: #020202 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+.clerk-profile-wrapper [class*="cl-internal"] {
+  box-shadow: none !important;
+  background: #020202 !important;
+}
+
+/* Specific targeting for cl-internal-e94jq8 */
+.cl-rootBox.cl-userProfile-root.cl-internal-e94jq8,
+.cl-userProfile-root.cl-internal-e94jq8,
+.cl-internal-e94jq8 {
+  background: #020202 !important;
+  background-color: #020202 !important;
+  box-shadow: none !important;
+}
+
+.clerk-profile-wrapper .cl-internal-e94jq8 {
+  background: #020202 !important;
+  background-color: #020202 !important;
+  box-shadow: none !important;
+}
+
+.clerk-profile-wrapper .cl-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: #020202 !important;
+}
+
+.clerk-profile-wrapper .cl-main {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: #020202 !important;
+}
+
+.clerk-profile-wrapper .cl-page {
+  width: 100% !important;
+  max-width: 100% !important;
+  background: #020202 !important;
+  overflow: hidden !important;
+}
+
+/* Fix overflow for cl-internal-jn4t */
+.clerk-profile-wrapper .cl-internal-jn4t,
+.cl-page.cl-internal-jn4t,
+.cl-internal-jn4t {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+}
+
+/* Force background on ALL Clerk elements */
+.clerk-profile-wrapper * {
+  background-color: #020202 !important;
+  box-sizing: border-box !important;
+}
+
+/* Prevent horizontal overflow on all Clerk elements */
+.clerk-profile-wrapper .cl-page,
+.clerk-profile-wrapper .cl-main,
+.clerk-profile-wrapper .cl-card,
+.clerk-profile-wrapper [class*="cl-internal"] {
+  overflow: hidden !important;
+  max-width: 100% !important;
+}
+
+/* Ensure all text and content wraps properly */
+.clerk-profile-wrapper * {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Except for buttons, inputs, and specific UI elements */
+.clerk-profile-wrapper button,
+.clerk-profile-wrapper input,
+.clerk-profile-wrapper select,
+.clerk-profile-wrapper textarea,
+.clerk-profile-wrapper [role="button"],
+.clerk-profile-wrapper .cl-formButtonPrimary,
+.clerk-profile-wrapper .cl-badge,
+.clerk-profile-wrapper .cl-avatarBox,
+.clerk-profile-wrapper .cl-avatarImage {
+  background-color: revert !important;
+}
+
+.clerk-profile-wrapper .cl-profileSectionContent,
+.clerk-profile-wrapper .cl-profileSection,
+.clerk-profile-wrapper .cl-formFieldRow,
+.clerk-profile-wrapper [class*="profileSection"] {
+  background: #020202 !important;
+}
+
+/* Remove green border from avatar */
+.clerk-profile-wrapper .cl-avatarBox,
+.clerk-profile-wrapper .cl-userButtonAvatarBox {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.cl-internal-15hkgn2 {
+  background: none !important;
+}
+/* Remove orange/warning colors and replace with green or neutral */
+.clerk-profile-wrapper .cl-badge,
+.clerk-profile-wrapper [class*="badge"] {
+  background-color: rgba(34, 197, 94, 0.15) !important;
+  color: #22c55e !important;
+}
+
+.clerk-profile-wrapper .cl-formFieldWarning,
+.clerk-profile-wrapper [class*="warning"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.clerk-profile-wrapper .cl-formFieldErrorText,
+.clerk-profile-wrapper [class*="error"] {
+  color: #ef4444 !important;
+}
+
+.clerk-profile-wrapper .cl-internal-b3fm6y,
+.clerk-profile-wrapper [class*="internal"] {
+  color: #ffffff !important;
+}
+
+.profile-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+}
+
+.profile-avatar {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.profile-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.info-header h2 {
+  font-size: var(--font-2xl);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.edit-btn,
+.save-btn,
+.cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+  font-size: var(--font-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.edit-btn {
+  background: var(--accent-green);
+  color: white;
+}
+
+.edit-btn:hover {
+  background: var(--accent-green-hover);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.save-btn {
+  background: var(--accent-green);
+  color: white;
+}
+
+.save-btn:hover {
+  background: var(--accent-green-hover);
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.info-item label {
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item p {
+  color: var(--text-primary);
+  font-size: var(--font-lg);
+}
+
+.user-id {
+  font-family: "Courier New", monospace;
+  font-size: var(--font-sm);
+  color: var(--accent-green);
+  word-break: break-all;
+}
+
+.edit-input {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-md);
+  transition: var(--transition-fast);
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: var(--accent-green);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: var(--spacing-lg);
+  }
+
+  .profile-card {
+    padding: var(--spacing-lg);
+  }
+
+  .info-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Responsive Clerk Profile */
+  .clerk-profile-wrapper {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .clerk-profile-wrapper .cl-rootBox {
+    padding: 1rem !important;
+    max-width: 100% !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  .clerk-profile-wrapper .cl-card {
+    padding: 1rem !important;
+  }
+
+  /* Make Clerk profile sections stack properly on mobile */
+  .clerk-profile-wrapper .cl-profileSection {
+    margin-bottom: var(--spacing-md) !important;
+  }
+
+  .clerk-profile-wrapper .cl-navbar {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: var(--spacing-md);
+  }
+
+  .profile-header h1 {
+    font-size: var(--font-2xl);
+  }
+
+  .profile-header p {
+    font-size: var(--font-md);
+  }
+
+  .clerk-profile-wrapper .cl-rootBox {
+    padding: 0.75rem !important;
+    border-radius: 0 !important;
+  }
+
+  /* Reduce font sizes on very small screens */
+  .clerk-profile-wrapper {
+    font-size: 14px !important;
+  }
+
+  .clerk-profile-wrapper .cl-navbar button {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+  }
+}
