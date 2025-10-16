@@ -258,7 +258,6 @@ export default function MyAssignedIssues() {
             <thead>
               <tr>
                 <th>Registration #</th>
-                <th>Title</th>
                 <th>Type</th>
                 <th>Status</th>
                 <th>Priority</th>
@@ -273,14 +272,6 @@ export default function MyAssignedIssues() {
                     <span className="reg-number">
                       {complaint.registrationNumber}
                     </span>
-                  </td>
-                  <td>
-                    <div className="title-cell">
-                      {complaint.title}
-                      {complaint.urgent && (
-                        <span className="urgent-badge">URGENT</span>
-                      )}
-                    </div>
                   </td>
                   <td>{complaint.type}</td>
                   <td>
