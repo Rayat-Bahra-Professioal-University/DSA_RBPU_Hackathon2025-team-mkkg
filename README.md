@@ -32,7 +32,6 @@ _Empowering citizens to build better cities, one complaint at a time_
 - [📸 Screenshots](#-screenshots)
 - [🚀 Installation](#-installation)
 - [🔐 Environment Setup](#-environment-setup)
-- [💻 Usage Guide](#-usage-guide)
 - [📁 Project Structure](#-project-structure)
 - [📄 License](#-license)
 - [📞 Contact](#-contact)
