@@ -317,20 +317,6 @@ _A glimpse into CityCare's modern, intuitive design_
 ![Admin Dashboard](./screenshots/admin_dashboard.png)
 <sub>_Powerful dashboard with real-time statistics and complaint management_</sub>
 
-</td>
-
-</tr>
-
-<tr>
-<td width="50%">
-
-### 📸 Camera Integration
-
-![Resolution Photos](./screenshots/resolution-photos.png)
-<sub>_Upload before/after photos using integrated camera or file upload_</sub>
-
-</td>
-<td width="50%">
 
 ### 👥 Assign Issues
 
@@ -338,9 +324,7 @@ _A glimpse into CityCare's modern, intuitive design_
 <sub>_Delegate complaints to specific admin team members_</sub>
 
 </td>
-</tr>
 
-<tr>
 <td colspan="2">
 
 ### 🔧 Manage Admins
