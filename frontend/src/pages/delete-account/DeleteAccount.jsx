@@ -1,19 +1,51 @@
-import { useUser, useClerk } from "@clerk/clerk-react";
-import { useState } from "react";
+import { useUser, useClerk, useAuth } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
 import { FiAlertTriangle, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "../../services/api";
 import "./DeleteAccount.css";
 
 export default function DeleteAccount() {
   const { user } = useUser();
   const { signOut } = useClerk();
+  const { isLoaded, isSignedIn } = useAuth();
   const navigate = useNavigate();
+  const api = useApi();
   const [confirmText, setConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [error, setError] = useState("");
+  const [pendingIssuesCount, setPendingIssuesCount] = useState(0);
 
-  const pendingIssuesCount = 3; // Mock data - replace with actual API call
+  // Fetch user's pending issues count
+  useEffect(() => {
+    const fetchPendingIssues = async () => {
+      // Don't fetch if not authenticated
+      if (!isLoaded || !isSignedIn) {
+        return;
+      }
+
+      try {
+        const response = await api.getMyComplaints({ limit: 1000 });
+        if (response.success) {
+          // Count pending issues (status: pending, in-progress, assigned)
+          const pending = response.data.complaints.filter(
+            (complaint) =>
+              complaint.status === "pending" ||
+              complaint.status === "in-progress" ||
+              complaint.status === "assigned"
+          ).length;
+          setPendingIssuesCount(pending);
+        }
+      } catch (error) {
+        console.error("Error fetching pending issues:", error);
+      }
+    };
+
+    if (isLoaded && isSignedIn) {
+      fetchPendingIssues();
+    }
+  }, [api, isLoaded, isSignedIn]);
 
   const handleDelete = async () => {
     setError("");
