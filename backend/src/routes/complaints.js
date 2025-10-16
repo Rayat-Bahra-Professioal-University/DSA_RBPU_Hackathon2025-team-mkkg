@@ -1,58 +1,24 @@
 import express from "express";
-import { v4 as uuidv4 } from "uuid";
-import db from "../utils/db.js";
+import * as controller from "../controllers/complaintController.js";
+import { requireAuthentication, getUserId } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// List complaints (simple, supports query filter by registrationNumber)
-router.get("/", (req, res) => {
-  const { q, status } = req.query;
-  let items = db.getAll();
+// Public route to get stats
+router.get("/stats", controller.getComplaintStats);
 
-  if (q) {
-    items = items.filter((i) => i.registrationNumber.includes(q));
-  }
+// Protected routes - require authentication
+router.use(requireAuthentication);
+router.use(getUserId);
 
-  if (status) {
-    items = items.filter((i) => i.status === status);
-  }
+// Get user's own complaints
+router.get("/my", controller.getMyComplaints);
 
-  res.json(items);
-});
-
-// Create complaint
-router.post("/", (req, res) => {
-  const { type, description, location, phone, urgent, files } = req.body;
-
-  if (!type || !description || !location) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-  const registrationNumber = `367374${Date.now().toString().slice(-9)}`;
-
-  const newItem = {
-    id: uuidv4(),
-    registrationNumber,
-    type,
-    description,
-    location,
-    phone: phone || null,
-    urgent: !!urgent,
-    files: files || [],
-    status: "pending",
-    date: new Date().toISOString(),
-  };
-
-  db.save(newItem);
-
-  res.status(201).json(newItem);
-});
-
-// Get single complaint
-router.get("/:id", (req, res) => {
-  const item = db.getById(req.params.id);
-  if (!item) return res.status(404).json({ error: "Not found" });
-  res.json(item);
-});
+// CRUD operations
+router.get("/", controller.listComplaints);
+router.post("/", controller.createComplaint);
+router.get("/:id", controller.getComplaint);
+router.put("/:id", controller.updateComplaint);
+router.delete("/:id", controller.deleteComplaint);
 
 export default router;

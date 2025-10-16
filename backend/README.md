@@ -3,6 +3,7 @@ CityCare Backend
 This is a minimal Express backend scaffold for the CityCare frontend.
 
 Features:
+
 - Express API with endpoints for complaints and uploads
 - Cloudinary integration for file uploads (images/videos)
 - Tiny JSON file DB for prototyping
@@ -20,12 +21,14 @@ Quick start:
    npm run dev
 
 4. API endpoints:
+
 - GET /api/v1/health
 - GET /api/v1/complaints
 - POST /api/v1/complaints
 - GET /api/v1/complaints/:id
-- POST /api/v1/uploads  (multipart/form-data, field name: file)
+- POST /api/v1/uploads (multipart/form-data, field name: file)
 
 Notes:
+
 - This is a prototype. Replace the file-backed DB with a real database (Postgres, MongoDB) for production.
 - Add Clerk verification middleware for protected routes as needed.
