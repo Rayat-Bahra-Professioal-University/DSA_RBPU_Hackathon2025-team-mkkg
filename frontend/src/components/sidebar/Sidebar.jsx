@@ -7,17 +7,28 @@ import {
   FiSearch,
   FiFileText,
   FiEye,
+  FiShield,
+  FiUsers,
+  FiUserCheck,
+  FiList,
+  FiClipboard,
 } from "react-icons/fi";
 import { RiProfileLine } from "react-icons/ri";
 import { FaTrash } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { useClerk } from "@clerk/clerk-react";
+import { useClerk, useUser } from "@clerk/clerk-react";
 import "./Sidebar.css";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const [activeItem, setActiveItem] = useState("dashboard");
   const location = useLocation();
   const { signOut } = useClerk();
+  const { user } = useUser();
+
+  // Check if user is admin
+  const isAdmin =
+    user?.publicMetadata?.role === "admin" ||
+    user?.privateMetadata?.role === "admin";
 
   const navigationSections = useMemo(
     () => [
@@ -47,13 +58,51 @@ const Sidebar = ({ isOpen, onClose }) => {
           },
           {
             id: "view-complaints",
-            label: "View All Complaints",
+            label: "Issues Sitemap",
             icon: FiEye,
             path: "/view-complaints",
             isLink: true,
           },
         ],
       },
+      ...(isAdmin
+        ? [
+            {
+              title: "Administration",
+              items: [
+                {
+                  id: "admin-dashboard",
+                  label: "Admin Dashboard",
+                  icon: FiShield,
+                  path: "/admin",
+                  isLink: true,
+                },
+                {
+                  id: "my-assigned",
+                  label: "My Assigned",
+                  icon: FiClipboard,
+                  path: "/admin/my-assigned",
+                  isLink: true,
+                },
+
+                {
+                  id: "assign-issues",
+                  label: "Assign Issues",
+                  icon: FiUserCheck,
+                  path: "/admin/assign-issues",
+                  isLink: true,
+                },
+                {
+                  id: "manage-admins",
+                  label: "Manage Admins",
+                  icon: FiUsers,
+                  path: "/admin/manage-admins",
+                  isLink: true,
+                },
+              ],
+            },
+          ]
+        : []),
       {
         title: "Account",
         items: [
@@ -81,7 +130,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         ],
       },
     ],
-    []
+    [isAdmin]
   );
 
   const footerItem = useMemo(

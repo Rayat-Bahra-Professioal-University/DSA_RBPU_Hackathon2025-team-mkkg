@@ -87,6 +87,31 @@
   margin-right: var(--spacing-md);
 }
 
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.user-greeting {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.welcome-text {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  font-weight: var(--font-normal);
+}
+
+.user-name {
+  font-size: var(--font-md);
+  color: var(--text-primary);
+  font-weight: var(--font-semibold);
+}
+
 .navbar-icon-btn {
   background: transparent;
   border: 1px solid var(--border-primary);
@@ -255,6 +280,10 @@
     width: 36px;
     height: 36px;
     font-size: 16px;
+  }
+
+  .user-greeting {
+    display: none;
   }
 }
 

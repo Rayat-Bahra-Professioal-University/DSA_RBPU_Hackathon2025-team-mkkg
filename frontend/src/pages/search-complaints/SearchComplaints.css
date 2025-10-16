@@ -182,7 +182,8 @@ select.filter-select option {
   background: var(--card-bg);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .results-table {
@@ -284,7 +285,6 @@ select.filter-select option {
 }
 
 .no-results {
-
   text-align: center;
   padding: var(--spacing-2xl);
   color: var(--text-muted);

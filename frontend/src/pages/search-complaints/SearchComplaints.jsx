@@ -1,57 +1,114 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 import { FiSearch, FiFilter, FiEye } from "react-icons/fi";
 import "./SearchComplaints.css";
+import { useApi } from "../../services/api";
 
 export default function SearchComplaints() {
   const navigate = useNavigate();
+  const api = useApi();
+  const { isLoaded, isSignedIn } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     status: "",
-    category: "",
+    type: "",
     dateFrom: "",
     dateTo: "",
   });
   const [results, setResults] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const mockComplaints = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    registrationNumber: `367374${873467873898 + i}`,
-    date: "12-Aug-2025",
-    category: ["potholes", "rubbish bins", "streetlights", "public spaces"][
-      i % 4
-    ],
-    status: ["pending", "closed", "in-progress"][i % 3],
-    description: "Sample issue description",
-    location: "Sample Location",
-  }));
+  // Load all complaints on mount
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      loadAllComplaints();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, isSignedIn]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-
-    let filtered = mockComplaints;
-
-    // Filter by search term (registration number)
-    if (searchTerm) {
-      filtered = filtered.filter((item) =>
-        item.registrationNumber.includes(searchTerm)
-      );
+  const loadAllComplaints = async () => {
+    // Don't fetch if not authenticated
+    if (!isLoaded || !isSignedIn) {
+      setIsLoading(true);
+      return;
     }
 
-    // Filter by status
-    if (filters.status) {
-      filtered = filtered.filter((item) => item.status === filters.status);
-    }
-
-    // Filter by category
-    if (filters.category) {
-      filtered = filtered.filter((item) => item.category === filters.category);
-    }
-
-    setResults(filtered);
+    setIsLoading(true);
+    setError(null);
     setHasSearched(true);
+
+    try {
+      const response = await api.getComplaints({ limit: 100 });
+      setResults(response.data || []);
+    } catch (err) {
+      console.error("Error loading complaints:", err);
+      setError(err.message || "Failed to load complaints");
+      setResults([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setHasSearched(true);
+
+    try {
+      // Build query parameters
+      const params = {
+        limit: 100, // Get up to 100 results
+      };
+
+      // Add search term (searches in description and registration number)
+      if (searchTerm.trim()) {
+        params.q = searchTerm.trim();
+      }
+
+      // Add filters
+      if (filters.status) {
+        params.status = filters.status;
+      }
+
+      if (filters.type) {
+        params.type = filters.type;
+      }
+
+      // For date filtering, we'll need to implement this on backend
+      // For now, we'll fetch all and filter client-side if needed
+
+      console.log("Searching with params:", params);
+      const response = await api.getComplaints(params);
+
+      let complaints = response.data || [];
+
+      // Client-side date filtering if dates are provided
+      if (filters.dateFrom) {
+        const fromDate = new Date(filters.dateFrom);
+        complaints = complaints.filter(
+          (c) => new Date(c.createdAt) >= fromDate
+        );
+      }
+
+      if (filters.dateTo) {
+        const toDate = new Date(filters.dateTo);
+        toDate.setHours(23, 59, 59, 999); // End of day
+        complaints = complaints.filter((c) => new Date(c.createdAt) <= toDate);
+      }
+
+      setResults(complaints);
+    } catch (err) {
+      console.error("Search error:", err);
+      setError(err.message || "Failed to search complaints");
+      setResults([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFilterChange = (key, value) => {
@@ -61,13 +118,31 @@ export default function SearchComplaints() {
   const resetFilters = () => {
     setFilters({
       status: "",
-      category: "",
+      type: "",
       dateFrom: "",
       dateTo: "",
     });
     setSearchTerm("");
     setResults([]);
     setHasSearched(false);
+    setError(null);
+  };
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  // Get location string
+  const getLocationString = (location) => {
+    if (!location) return "Unknown";
+    if (location.address) return location.address;
+    return `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`;
   };
 
   return (
@@ -78,6 +153,21 @@ export default function SearchComplaints() {
       </div>
 
       <div className="search-section">
+        {error && (
+          <div
+            style={{
+              background: "rgba(239, 68, 68, 0.1)",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
+              padding: "1rem",
+              borderRadius: "8px",
+              marginBottom: "1rem",
+              color: "#ef4444",
+            }}
+          >
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+
         <form onSubmit={handleSearch} className="search-form">
           <div className="search-input-wrapper">
             <FiSearch className="search-icon" />
@@ -97,8 +187,8 @@ export default function SearchComplaints() {
             <FiFilter />
             Filters
           </button>
-          <button type="submit" className="search-btn">
-            Search
+          <button type="submit" className="search-btn" disabled={isLoading}>
+            {isLoading ? "Searching..." : "Search"}
           </button>
         </form>
 
@@ -119,17 +209,18 @@ export default function SearchComplaints() {
             </div>
 
             <div className="filter-group">
-              <label>Category</label>
+              <label>Issue Type</label>
               <select
-                value={filters.category}
-                onChange={(e) => handleFilterChange("category", e.target.value)}
+                value={filters.type}
+                onChange={(e) => handleFilterChange("type", e.target.value)}
                 className="filter-select"
               >
-                <option value="">All Categories</option>
+                <option value="">All Types</option>
                 <option value="potholes">Potholes</option>
-                <option value="rubbish bins">Rubbish Bins</option>
+                <option value="rubbish-bins">Rubbish Bins</option>
                 <option value="streetlights">Streetlights</option>
-                <option value="public spaces">Public Spaces</option>
+                <option value="public-spaces">Public Spaces</option>
+                <option value="other">Other</option>
               </select>
             </div>
 
@@ -160,7 +251,22 @@ export default function SearchComplaints() {
         )}
       </div>
 
-      {results.length > 0 && (
+      {isLoading && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "2rem",
+            background: "var(--card-bg)",
+            borderRadius: "8px",
+            marginTop: "1rem",
+          }}
+        >
+          <div className="loading-spinner"></div>
+          <p>Searching complaints...</p>
+        </div>
+      )}
+
+      {results.length > 0 && !isLoading && (
         <div className="results-section">
           <h2>Search Results ({results.length})</h2>
           <div className="results-table-container">
@@ -177,22 +283,24 @@ export default function SearchComplaints() {
               </thead>
               <tbody>
                 {results.map((item) => (
-                  <tr key={item.id}>
+                  <tr key={item._id}>
                     <td className="reg-number">{item.registrationNumber}</td>
-                    <td>{item.date}</td>
+                    <td>{formatDate(item.createdAt)}</td>
                     <td>
-                      <span className="category-badge">{item.category}</span>
+                      <span className="category-badge">
+                        {item.type.replace("-", " ")}
+                      </span>
                     </td>
                     <td>
                       <span className={`status-badge status-${item.status}`}>
                         {item.status}
                       </span>
                     </td>
-                    <td>{item.location}</td>
+                    <td>{getLocationString(item.location)}</td>
                     <td>
                       <button
                         className="view-details-btn"
-                        onClick={() => navigate(`/issue/${item.id}`)}
+                        onClick={() => navigate(`/issue/${item._id}`)}
                         title="View Details"
                       >
                         <FiEye />
@@ -207,9 +315,33 @@ export default function SearchComplaints() {
         </div>
       )}
 
-      {results.length === 0 && hasSearched && (
-        <div className="no-results" style={{ display: "block" }}>
+      {results.length === 0 && hasSearched && !isLoading && (
+        <div
+          className="no-results"
+          style={{
+            display: "block",
+            textAlign: "center",
+            padding: "2rem",
+            background: "var(--card-bg)",
+            borderRadius: "8px",
+            marginTop: "1rem",
+          }}
+        >
           <p>No complaints found matching your search criteria</p>
+          <button
+            onClick={resetFilters}
+            style={{
+              marginTop: "1rem",
+              padding: "0.5rem 1rem",
+              background: "var(--accent-primary)",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Clear Search
+          </button>
         </div>
       )}
     </div>

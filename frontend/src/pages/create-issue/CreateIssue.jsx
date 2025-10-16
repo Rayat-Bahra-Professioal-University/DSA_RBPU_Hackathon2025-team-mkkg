@@ -1,18 +1,28 @@
 import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { FiUpload, FiMic, FiMapPin, FiAlertCircle } from "react-icons/fi";
+import {
+  FiUpload,
+  FiMic,
+  FiMapPin,
+  FiAlertCircle,
+  FiCamera,
+  FiX,
+} from "react-icons/fi";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { useApi } from "../../services/api";
 import "./CreateIssue.css";
 
 export default function CreateIssue() {
+  const api = useApi();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm();
 
   const {
@@ -27,8 +37,14 @@ export default function CreateIssue() {
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [mapError, setMapError] = useState(null);
   const [initialDescription, setInitialDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const [stream, setStream] = useState(null);
   const mapRef = useRef(null);
   const fileInputRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
 
   const description = watch("description", "");
 
@@ -160,13 +176,23 @@ export default function CreateIssue() {
     const files = Array.from(e.target.files);
     const validFiles = files.filter((file) => {
       const isImage = file.type.startsWith("image/");
-      const isVideo = file.type.startsWith("video/");
-      const isUnder10MB = file.size <= 10 * 1024 * 1024; // 10MB
-      return (isImage || isVideo) && isUnder10MB;
+      const isUnder5MB = file.size <= 5 * 1024 * 1024; // 5MB
+
+      if (!isImage) {
+        alert(`${file.name} is not an image file. Only images are allowed.`);
+        return false;
+      }
+
+      if (!isUnder5MB) {
+        alert(`${file.name} is too large. Maximum file size is 5MB.`);
+        return false;
+      }
+
+      return true;
     });
 
     if (validFiles.length + selectedFiles.length > 5) {
-      alert("Maximum 5 files allowed");
+      alert("Maximum 5 images allowed");
       return;
     }
 
@@ -176,6 +202,111 @@ export default function CreateIssue() {
   const removeFile = (index) => {
     setSelectedFiles(selectedFiles.filter((_, i) => i !== index));
   };
+
+  const startCamera = async () => {
+    try {
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert(
+          "Camera access is not supported in your browser. Please use Chrome, Firefox, or Safari."
+        );
+        return;
+      }
+
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment", // Use back camera on mobile
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+        audio: false,
+      });
+
+      setStream(mediaStream);
+      setShowCamera(true);
+
+      // Wait for next tick to ensure video element is rendered
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = mediaStream;
+          videoRef.current.play().catch((err) => {
+            console.error("Error playing video:", err);
+          });
+        }
+      }, 100);
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+      let errorMessage = "Unable to access camera.";
+
+      if (
+        error.name === "NotAllowedError" ||
+        error.name === "PermissionDeniedError"
+      ) {
+        errorMessage =
+          "Camera permission denied. Please allow camera access in your browser settings.";
+      } else if (error.name === "NotFoundError") {
+        errorMessage = "No camera found on your device.";
+      } else if (error.name === "NotReadableError") {
+        errorMessage = "Camera is already in use by another application.";
+      }
+
+      alert(errorMessage);
+    }
+  };
+
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      setStream(null);
+    }
+    setShowCamera(false);
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw the current video frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to blob
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          const timestamp = Date.now();
+          const file = new File([blob], `camera-photo-${timestamp}.jpg`, {
+            type: "image/jpeg",
+          });
+
+          if (selectedFiles.length >= 5) {
+            alert("Maximum 5 images allowed");
+            return;
+          }
+
+          setSelectedFiles([...selectedFiles, file]);
+          stopCamera();
+        }
+      },
+      "image/jpeg",
+      0.9
+    );
+  };
+
+  // Cleanup camera on component unmount
+  useEffect(() => {
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [stream]);
 
   const handleVoiceRecording = () => {
     if (!browserSupportsSpeechRecognition) {
@@ -199,23 +330,84 @@ export default function CreateIssue() {
     }
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!location) {
       alert("Please select a location on the map");
       return;
     }
 
-    const formData = {
-      ...data,
-      location,
-      files: selectedFiles,
-    };
+    setIsSubmitting(true);
 
-    console.log("Form submitted:", formData);
-    alert(
-      "Issue reported successfully! Registration ID: #" +
-        Math.floor(Math.random() * 1000000)
-    );
+    try {
+      // First, upload files if any
+      let uploadedFiles = [];
+      if (selectedFiles.length > 0) {
+        setUploadingFiles(true);
+        try {
+          console.log("Uploading files:", selectedFiles);
+          console.log("Number of files:", selectedFiles.length);
+          console.log(
+            "File types:",
+            selectedFiles.map((f) => f.type)
+          );
+
+          const uploadResults = await api.uploadFiles(selectedFiles);
+          // API already returns the array directly
+          uploadedFiles = Array.isArray(uploadResults) ? uploadResults : [];
+          console.log("Files uploaded successfully:", uploadedFiles);
+          console.log("Number of uploaded files:", uploadedFiles.length);
+        } catch (uploadError) {
+          console.error("File upload error:", uploadError);
+          setUploadingFiles(false);
+          alert(
+            `Failed to upload images: ${
+              uploadError.message || "Unknown error"
+            }. Please try again.`
+          );
+          setIsSubmitting(false);
+          return; // Stop submission if upload fails
+        }
+        setUploadingFiles(false);
+      }
+
+      // Create complaint with uploaded file URLs
+      const complaintData = {
+        type: data.type,
+        description: data.description,
+        location,
+        phone: data.phone || null,
+        urgent: data.urgent || false,
+        files: uploadedFiles,
+      };
+
+      console.log("Creating complaint:", complaintData);
+      const result = await api.createComplaint(complaintData);
+
+      console.log("Complaint created successfully:", result);
+
+      // Handle different response formats
+      const registrationNumber =
+        result.registrationNumber ||
+        result.data?.registrationNumber ||
+        "Unknown";
+
+      alert(
+        `Issue reported successfully!\nRegistration ID: ${registrationNumber}\n\nYou can track this complaint from your dashboard.`
+      );
+
+      // Reset form
+      reset();
+      setSelectedFiles([]);
+      setLocation(null);
+
+      // Optionally redirect to dashboard
+      // navigate("/dashboard");
+    } catch (error) {
+      console.error("Error creating complaint:", error);
+      alert(`Failed to create complaint: ${error.message || "Unknown error"}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -280,13 +472,13 @@ export default function CreateIssue() {
         </div>
 
         <div className="form-group">
-          <label>Photos/Videos (Max 5, up to 10MB each)</label>
+          <label>Photos (Max 5, up to 5MB each)</label>
           <div className="file-upload-area">
             <input
               ref={fileInputRef}
               type="file"
               multiple
-              accept="image/*,video/*"
+              accept="image/*"
               onChange={handleFileChange}
               className="file-input"
             />
@@ -294,16 +486,28 @@ export default function CreateIssue() {
               type="button"
               className="upload-btn"
               onClick={() => fileInputRef.current.click()}
+              disabled={uploadingFiles}
             >
               <FiUpload />
-              <span>Upload Files</span>
+              <span>{uploadingFiles ? "Uploading..." : "Upload Images"}</span>
+            </button>
+            <button
+              type="button"
+              className="upload-btn camera-btn"
+              onClick={startCamera}
+              disabled={uploadingFiles || showCamera}
+            >
+              <FiCamera />
+              <span>Take Photo</span>
             </button>
           </div>
           {selectedFiles.length > 0 && (
             <div className="file-preview">
               {selectedFiles.map((file, index) => (
                 <div key={index} className="file-item">
-                  <span>{file.name}</span>
+                  <span>
+                    {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                  </span>
                   <button type="button" onClick={() => removeFile(index)}>
                     ×
                   </button>
@@ -312,6 +516,46 @@ export default function CreateIssue() {
             </div>
           )}
         </div>
+
+        {/* Camera Modal */}
+        {showCamera && (
+          <div className="camera-modal-overlay" onClick={stopCamera}>
+            <div className="camera-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="camera-header">
+                <h3>Take Photo</h3>
+                <button className="close-camera-btn" onClick={stopCamera}>
+                  <FiX />
+                </button>
+              </div>
+              <div className="camera-container">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="camera-video"
+                />
+                <canvas ref={canvasRef} style={{ display: "none" }} />
+              </div>
+              <div className="camera-controls">
+                <button
+                  type="button"
+                  className="capture-btn"
+                  onClick={capturePhoto}
+                >
+                  <FiCamera /> Capture Photo
+                </button>
+                <button
+                  type="button"
+                  className="cancel-camera-btn"
+                  onClick={stopCamera}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="form-group">
           <label>
@@ -370,8 +614,16 @@ export default function CreateIssue() {
           )}
         </div>
 
-        <button type="submit" className="submit-btn">
-          Submit Issue Report
+        <button
+          type="submit"
+          className="submit-btn"
+          disabled={isSubmitting || uploadingFiles}
+        >
+          {uploadingFiles
+            ? "Uploading images..."
+            : isSubmitting
+            ? "Submitting..."
+            : "Submit Issue Report"}
         </button>
       </form>
     </div>

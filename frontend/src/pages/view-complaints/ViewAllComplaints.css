@@ -17,6 +17,121 @@
   margin-bottom: var(--spacing-xl);
 }
 
+/* Heat Zone Alert */
+.heat-zone-alert {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(220, 38, 38, 0.15) 100%
+  );
+  border: 2px solid #ef4444;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  /* animation: heat-glow 3s ease-in-out infinite; */
+}
+
+@keyframes heat-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+  }
+}
+
+.heat-zone-alert .alert-icon {
+  font-size: 48px;
+  flex-shrink: 0;
+  animation: heat-pulse 2s ease-in-out infinite;
+}
+
+@keyframes heat-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.heat-zone-alert .alert-content {
+  flex: 1;
+}
+
+.heat-zone-alert .alert-content strong {
+  display: block;
+  color: #ff3333;
+  font-size: var(--font-xl);
+  margin-bottom: var(--spacing-xs);
+}
+
+.heat-zone-alert .alert-content p {
+  color: var(--text-primary);
+  font-size: var(--font-md);
+  margin: 0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: var(--transition-normal);
+}
+
+.stat-card:hover {
+  background: rgba(34, 197, 94, 0.03);
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-content h3 {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.stat-content p {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  margin: var(--spacing-xs) 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .map-wrapper {
   width: 100%;
   height: 600px;
@@ -131,6 +246,48 @@
   border: 1px solid rgba(34, 197, 94, 0.5);
 }
 
+.popup-detail .status.heat-zone {
+  background-color: rgba(239, 68, 68, 0.4);
+  color: #ff3333;
+  border: 2px solid #ff0000;
+  font-weight: var(--font-bold);
+  animation: pulse-heat 2s ease-in-out infinite;
+}
+
+@keyframes pulse-heat {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.popup-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.popup-view-btn {
+  width: 100%;
+  padding: 8px 16px;
+  background: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popup-view-btn:hover {
+  background: var(--accent-green-hover);
+  transform: translateY(-1px);
+}
+
 /* Leaflet popup close button styling */
 .leaflet-popup-close-button {
   color: #000000 !important;
@@ -161,11 +318,57 @@
     padding: var(--spacing-md);
   }
 
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .stat-content h3 {
+    font-size: var(--font-2xl);
+  }
+
+  .stat-content p {
+    font-size: var(--font-xs);
+  }
+
   .map-wrapper {
     height: 400px;
   }
 
+  .heat-zone-alert {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-md);
+  }
+
+  .heat-zone-alert .alert-icon {
+    font-size: 36px;
+  }
+
+  .heat-zone-alert .alert-content strong {
+    font-size: var(--font-lg);
+  }
+
+  .heat-zone-alert .alert-content p {
+    font-size: var(--font-sm);
+  }
+
   .view-complaints-page h1 {
     font-size: var(--font-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }

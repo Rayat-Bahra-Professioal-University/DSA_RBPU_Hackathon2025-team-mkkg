@@ -1,18 +1,11 @@
-import {
-  FiMenu,
-  FiX,
-  FiSun,
-  FiMoon,
-  FiHelpCircle,
-  FiMessageCircle,
-  FiMail,
-} from "react-icons/fi";
-import { UserButton } from "@clerk/clerk-react";
+import { FiMenu, FiX, FiSun, FiMoon } from "react-icons/fi";
+import { UserButton, useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import "./Navbar.css";
 
 const Navbar = ({ onMobileMenuToggle, isMobileMenuOpen }) => {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const { user } = useUser();
 
   useEffect(() => {
     // Check for saved theme preference or default to dark mode
@@ -48,22 +41,6 @@ const Navbar = ({ onMobileMenuToggle, isMobileMenuOpen }) => {
 
         <div className="navbar-right">
           <div className="navbar-actions">
-            <button className="navbar-icon-btn" aria-label="Help" title="Help">
-              <FiHelpCircle />
-            </button>
-
-            <button className="navbar-icon-btn" aria-label="FAQ" title="FAQ">
-              <FiMessageCircle />
-            </button>
-
-            <button
-              className="navbar-icon-btn"
-              aria-label="Contact Us"
-              title="Contact Us"
-            >
-              <FiMail />
-            </button>
-
             <button
               className="navbar-icon-btn theme-toggle"
               onClick={toggleTheme}
@@ -76,14 +53,24 @@ const Navbar = ({ onMobileMenuToggle, isMobileMenuOpen }) => {
             </button>
           </div>
 
-          <UserButton
-            afterSignOutUrl="/sign-in"
-            appearance={{
-              elements: {
-                avatarBox: "w-10 h-10",
-              },
-            }}
-          />
+          <div className="user-section">
+            {user && (
+              <div className="user-greeting">
+                <span className="welcome-text">Welcome,</span>
+                <span className="user-name">
+                  {user.firstName || user.username || "User"}
+                </span>
+              </div>
+            )}
+            <UserButton
+              afterSignOutUrl="/sign-in"
+              appearance={{
+                elements: {
+                  avatarBox: "w-10 h-10",
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
     </nav>
