@@ -166,7 +166,8 @@ export default function ViewAllComplaints() {
     // Group complaints by proximity (within ~500 meters)
     const clusters = [];
     const processed = new Set();
-    const CLUSTER_DISTANCE = 0.01; // Approximately 1km in degrees (increased for better clustering)
+    const CLUSTER_DISTANCE = 0.005; // ~500m in degrees (smaller for tighter clustering)
+    const MIN_CLUSTER_COUNT = 3; // show clusters with at least this many complaints
 
     mockData.forEach((complaint, index) => {
       if (processed.has(index)) return;
@@ -193,8 +194,8 @@ export default function ViewAllComplaints() {
 
       processed.add(index);
 
-      // Only include clusters with more than 8 issues (Heat Zones)
-      if (cluster.complaints.length > 8) {
+      // Only include clusters with at least MIN_CLUSTER_COUNT issues
+      if (cluster.complaints.length >= MIN_CLUSTER_COUNT) {
         clusters.push(cluster);
       }
     });
@@ -221,9 +222,30 @@ export default function ViewAllComplaints() {
         `Heat Zone at [${avgLat}, ${avgLng}] with ${cluster.complaints.length} issues`
       );
 
+      // Estimate a radius based on spread of complaints in the cluster
+      const maxLatDiff = Math.max(
+        ...cluster.complaints.map((c) => Math.abs(c.coords[0] - avgLat))
+      );
+      const maxLngDiff = Math.max(
+        ...cluster.complaints.map((c) => Math.abs(c.coords[1] - avgLng))
+      );
+
+      // Convert degree differences to meters approximately (1 degree ~= 111km)
+      const maxDeg = Math.max(maxLatDiff, maxLngDiff);
+      const approxRadiusMeters = Math.max(
+        200,
+        Math.round(maxDeg * 111000 * 1.2)
+      );
+
+      // Also scale a little with cluster size so denser clusters appear larger
+      const scaledRadius = Math.max(
+        approxRadiusMeters,
+        cluster.complaints.length * 150
+      );
+
       return {
         center: [avgLat, avgLng],
-        radius: 500, // 500 meters
+        radius: scaledRadius,
         count: cluster.complaints.length,
         pendingCount,
         inProgressCount,
