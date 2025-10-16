@@ -258,7 +258,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 📊 User Dashboard
 
-![User Dashboard](./screenshots/user-dashboard.png)
+![User Dashboard](./screenshots/user_dashboard.png)
 <sub>_Comprehensive overview of all complaints with live statistics_</sub>
 
 </td>
@@ -269,7 +269,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 📝 Create Complaint
 
-![Create Complaint](./screenshots/create-complaint.png)
+![Create Complaint](./screenshots/create_issue_1.png)
 <sub>_Intuitive form with photo upload, camera, location picker & voice input_</sub>
 
 </td>
@@ -277,7 +277,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 🗺️ Issue Sitemap & Heat Zones
 
-![Issue Sitemap](./screenshots/issue-sitemap.png)
+![Issue Sitemap](./screenshots/site_map_issues.png)
 <sub>_Interactive map with heat zones for high-density complaint areas (8+)_</sub>
 
 </td>
@@ -288,7 +288,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 📱 Complaint Details
 
-![Complaint Details](./screenshots/complaint-details.png)
+![Complaint Details](./screenshots/issues_details_1.png)
 <sub>_Detailed view with real-time status tracking and updates_</sub>
 
 </td>
@@ -296,7 +296,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 🔍 Search & Filter
 
-![Search Complaints](./screenshots/search-complaints.png)
+![Search Complaints](./screenshots/search_issues.png)
 <sub>_Advanced search with multiple filters and sorting options_</sub>
 
 </td>
@@ -315,18 +315,11 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### � Admin Dashboard
 
-![Admin Dashboard](./screenshots/admin-dashboard.png)
+![Admin Dashboard](./screenshots/admin_dashboard.png)
 <sub>_Powerful dashboard with real-time statistics and complaint management_</sub>
 
 </td>
-<td width="50%">
 
-### ✅ Status Management
-
-![Status Management](./screenshots/status-management.png)
-<sub>_Update status with admin notes and resolution photos_</sub>
-
-</td>
 </tr>
 
 <tr>
@@ -342,7 +335,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 👥 Assign Issues
 
-![Assign Issues](./screenshots/assign-issues.png)
+![Assign Issues](./screenshots/assigne_issues.png)
 <sub>_Delegate complaints to specific admin team members_</sub>
 
 </td>
@@ -353,7 +346,7 @@ _A glimpse into CityCare's modern, intuitive design_
 
 ### 🔧 Manage Admins
 
-![Manage Admins](./screenshots/manage-admins.png)
+![Manage Admins](./screenshots/manage_admin.png)
 <sub>_Add, remove, and manage admin users with role-based access control_</sub>
 
 </td>
@@ -365,8 +358,8 @@ _A glimpse into CityCare's modern, intuitive design_
 ### 📱 Mobile Responsive Design
 
 <img src="./screenshots/mobile_ss/Screenshot 2025-10-16 061238.png" width="28%" alt="Mobile Home">
-<img src="./screenshots/mobile_ss/Screenshot 2025-10-16 061258.png" width="28%" alt="Mobile Dashboard">
-<img src="./screenshots/mobile_ss/Screenshot 2025-10-16 061305.png" width="28%" alt="Mobile Create">
+<img src="./screenshots/mobile_ss/Screenshot 2025-10-16 061255.png" width="28%" alt="Mobile Dashboard">
+<img src="./screenshots/mobile_ss/Screenshot 2025-10-16 061308.png" width="28%" alt="Mobile Create">
 
 <sub>_Fully responsive design optimized for tablets and mobile devices_</sub>
 
