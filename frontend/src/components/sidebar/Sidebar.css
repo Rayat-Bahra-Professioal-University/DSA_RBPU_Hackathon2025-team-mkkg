@@ -63,7 +63,7 @@
 
 .section-title {
   color: rgb(115, 115, 115);
-  font-size: var(--font-xs);
+  font-size: var(--font-xs) !important;
   font-weight: var(--font-semibold);
   letter-spacing: 1.6px;
   text-transform: uppercase;

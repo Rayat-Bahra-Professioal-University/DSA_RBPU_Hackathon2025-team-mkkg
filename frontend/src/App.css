@@ -160,8 +160,11 @@
 .app {
   background: var(--primary-bg);
   min-height: 100vh;
+  height: auto;
   color: var(--text-primary);
   font-family: "Poppins", sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Global utility classes */

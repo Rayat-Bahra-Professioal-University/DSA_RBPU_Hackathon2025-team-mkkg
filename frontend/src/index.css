@@ -11,7 +11,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #0a0a0a;
   color: white;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 html {
@@ -21,6 +22,7 @@ html {
 #root {
   width: 100%;
   min-height: 100vh;
+  height: auto;
 }
 
 /* Remove default button styles */
